@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <title>My First AngularJS Program</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    </head>
+    <body ng-controller="MainController">
+        <h2>Add Student</h2>
+        <input type="text" ng-model="newName" placeholder="Enter Student name">
+        <input type="text" ng-model="newDepartment" placeholder="Enter Department">
+        <input type="number" ng-model="newMark" min="0" max="100" placeholder="Enter mark">
+        <button ng-click="addStudent()">Add Student</button>
+        <p>Total students: {{students.length}}</p>
+        <h2>Student List</h2>
+        <input type="text" ng-model="searchText" placeholder="Search students">
+        <ul>
+            <li ng-repeat="student in students | filter:searchText | orderBy:'name'">
+                {{student.name | uppercase}} 
+                <br>
+                 {{student.department | uppercase}}
+                 <br>
+                 Mark: {{student.mark}}
+                 <button ng-click="removeStudent(student)">Delete</button>
+            </li>
+        </ul>
+        <p ng-if="students.length == 0">No Students available.</p>
+        <script>
+            var app = angular.module("myApp",[]);
+            app.controller("MainController", function($scope){          
+                $scope.students = [
+                    {name: "Swetha Shree", department: "IT", mark:"100"},
+                    {name: "Manish Raj", department: "CSE", mark:"100"},
+                    {name: "Kamal Raj", department: "IT", mark:"100"},
+                    {name: "Easwari K", department: "CSE", mark:"100"}
+                ];
+                $scope.addStudent=function(){
+                    if($scope.newName && $scope.newDepartment && $scope.newMark != null && $scope.newMark >= 0 && $scope.newMark <=100){
+                    $scope.students.push({
+                        name: $scope.newName,
+                        department: $scope.newDepartment,
+                        mark: Number($scope.newMark)
+                    });
+                    $scope.newName="";
+                    $scope.newDepartment="";
+                    $scope.newMark=null;
+                }
+                };
+                $scope.removeStudent=function(student){
+                    var index = $scope.students.indexOf(student);
+                    if(index !== -1){
+                        $scope.students.splice(index, 1);
+                    }
+                };
+            });
+        </script>
+    </body>
+</html>

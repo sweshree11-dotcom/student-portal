@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <title>Students</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="Main">
+
+    <h2>Add Student</h2>
+
+    <input ng-model="name" placeholder="Name">
+
+    <input ng-model="dept" placeholder="Department">
+
+    <input type="number" ng-model="mark" placeholder="Mark">
+
+    <button ng-click="add()">Add</button>
+
+    <p>{{msg}}</p>
+
+    <p>Total: {{students.length}}</p>
+
+    <input ng-model="search" placeholder="Search">
+
+    <ul>
+        <li ng-repeat="s in students | filter:search | orderBy:'name'">
+
+            {{s.name | uppercase}} -
+            {{s.department | uppercase}} -
+            {{s.mark}}
+
+            <button ng-click="del(s)">Delete</button>
+
+        </li>
+    </ul>
+
+    <script>
+
+        var app = angular.module("myApp", []);
+
+        app.controller("Main", function($scope, $http) {
+
+            var url = "http://localhost:3000/students";
+
+            $scope.students = [];
+
+            $scope.load = function() {
+
+                $http.get(url).then(function(r) {
+
+                    $scope.students = r.data;
+
+                });
+
+            };
+
+            $scope.add = function() {
+
+                $http.post(url, {
+
+                    name: $scope.name,
+
+                    department: $scope.dept,
+
+                    mark: $scope.mark
+
+                }).then(function() {
+
+                    $scope.msg = "Added!";
+
+                    $scope.name = "";
+
+                    $scope.dept = "";
+
+                    $scope.mark = null;
+
+                    $scope.load();
+
+                });
+
+            };
+
+            $scope.del = function(s) {
+
+                $http.delete(url + "/" + s._id)
+                    .then(function() {
+
+                        $scope.load();
+
+                    });
+
+            };
+
+            $scope.load();
+
+        });
+
+    </script>
+
+</body>
+
+</html>

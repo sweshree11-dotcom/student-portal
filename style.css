@@ -1,0 +1,29 @@
+
+students {
+    display: block;
+    font-family: Arial;
+    background-color: lightblue;
+    padding: 20px;
+}
+
+student {
+    display: block;
+    background-color: white;
+    border: 2px solid blue;
+    padding: 15px;
+    margin: 10px;
+}
+
+rollno, name, department, email {
+    display: block;
+    margin: 5px;
+}
+
+name {
+    color: blue;
+    font-weight: bold;
+}
+
+<?xml-stylesheet type="text/css" href="style.css"?>
+py -m pip install lxml
+py -c "from lxml import etree; dtd=etree.DTD('student.dtd'); doc=etree.parse('student.xml'); print('VALID XML + DTD' if dtd.validate(doc) else dtd.error_log)"
